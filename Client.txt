@@ -1,0 +1,3 @@
+125 :Bousselham          :Oussama             :J471582   :25, Rue Meknes, Quartier Industriel, Agadir           :0617458296
+74  :Zfizef              :Karim               :J951375   :78, Rue El idrissi, Quartier Talborjt, Agadir         :0695133756
+15  :Amzil               :Abdessamad          :K785412   :21, Rue 215, Quartier Founty, Agadir                  :0651478932
