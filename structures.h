@@ -27,10 +27,9 @@ typedef struct Client{
     int idClient;
     char nom[20];
     char prenom[20];
-    int cin;
-    char adresse[15];
+    char cin[10];
+    char adresse[55];
     int telephone;
 }Client;
 
 #endif // STRUCTURES_H_INCLUDED
-
