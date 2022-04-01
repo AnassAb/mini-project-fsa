@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "structures.h"
 #include "GestionVoiture.h"
-
+#include "GestionClient.h"
 //Prototype des fonctions menu
 
 void menu_principal (char *ficV, char *ficC, char *ficCL);
@@ -107,25 +107,29 @@ void menu_gv (char *ficV) {
         scanf("%d", &x);
         switch (x) {
             case 1:
+                system("cls");
                 n = nbrVoiture(ficV);
                 ListeVoitures(ficV, n);
                 printf("Appuyer sur une touche pour revenir au menu!\n");
                 getch();
                 break;
             case 2:
+                system("cls");
                 n = nbrVoiture(ficV);
                 AjouterVoiture(ficV, n);
-                printf("La voiture %d a %ct%c ajout%ce avec succ%cs!\n", n+1, 130,130,130,138); //Code ASCII: � : 130 - � : 138
+                printf("La voiture %d a %ct%c ajout%ce avec succ%cs!\n", n+1, 130,130,130,138); //Code ASCII: é : 130 - è : 138
                 printf("Appuyer sur une touche pour revenir au menu!\n");
                 getch();
                 break;
             case 3:
+                system("cls");
                 n = nbrVoiture(ficV);
                 ModifierVoiture(ficV, n);
                 printf("Appuyer sur une touche pour revenir au menu!\n");
                 getch();
                 break;
             case 4:
+                system("cls");
                 n = nbrVoiture(ficV);
                 SupprimerVoiture(ficV, n);
                 printf("Appuyer sur une touche pour revenir au menu!\n");
@@ -135,7 +139,7 @@ void menu_gv (char *ficV) {
     } while (x!=5);
 }
 void menu_gc (char *ficC) {
-    int x;
+    int x, n;
     do {
         system("cls");
         printf("\n\t\t\t\t\t---------------Gestion des Clients---------------\n");
@@ -152,19 +156,32 @@ void menu_gc (char *ficC) {
         scanf("%d", &x);
         switch (x) {
             case 1:
-                printf("Liste des client");
+                system("cls");
+                n = nbrClient(ficC);
+                ListeClient(ficC,n);
+                printf("Appuyer sur une touche pour revenir au menu!\n");
                 getch();
                 break;
             case 2:
-                printf("Ajouter client");
+                system("cls");
+                n = nbrClient(ficC);
+                AjouterClient(ficC,n);
+                printf("Le client %d a %ct%c ajout%c avec succ%cs!\n", n+1, 130,130,130,138); //Code ASCII: é : 130 - è : 138
+                printf("Appuyer sur une touche pour revenir au menu!\n");
                 getch();
                 break;
             case 3:
-                printf("Modifier client");
+                system("cls");
+                n = nbrClient(ficC);
+                ModifierClient(ficC,n);
+                printf("Appuyer sur une touche pour revenir au menu!\n");
                 getch();
                 break;
             case 4:
-                printf("Supprimer client");
+                system("cls");
+                n = nbrClient(ficC);
+                SupprimerClient(ficC,n);
+                printf("Appuyer sur une touche pour revenir au menu!\n");
                 getch();
                 break;
         }
