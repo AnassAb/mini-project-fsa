@@ -6,9 +6,9 @@
 #include <string.h>
 #include "structures.h"
 #define MAX 1000
-#define SIZE 66
+#define VSIZE 66
 
-int id_n(char *fichier, int idVoiture, int nbrV){
+int idV_n(char *fichier, int idVoiture, int nbrV){
     FILE *fvoiture = NULL;
     int i;
     char str[5];
@@ -30,7 +30,7 @@ int id_n(char *fichier, int idVoiture, int nbrV){
             ln = count;
             break;
         }
-        fseek(fvoiture,SIZE-4,SEEK_CUR);
+        fseek(fvoiture,VSIZE-4,SEEK_CUR);
     }
 
     fclose(fvoiture);
@@ -47,7 +47,7 @@ void AfficherVoiture (char * fichier, int nbrV){
         printf("ERREUR: Impossible d'ouvrir le fichier!\n");
         exit(0);
     }
-    fseek(fvoiture,SIZE*(nbrV-1), SEEK_SET);
+    fseek(fvoiture,VSIZE*(nbrV-1), SEEK_SET);
     printf("Voiture %d:\n", nbrV);
     printf("\tId: ");
     for(i=0; i<4;i++){
@@ -133,7 +133,7 @@ void AjouterVoiture (char *fichier, int n){
     do{
         printf("\tid: ");
         scanf("%d", &V.idVoiture);
-        ln = id_n(fichier, V.idVoiture, n);
+        ln = idV_n(fichier, V.idVoiture, n);
         if(ln != -1)
             printf("L'id entr%c est d%cj%c utilis%c.\nVeuillez entrer une id unique!\n",130,130,133,130);
     }while(ln != -1);
@@ -207,11 +207,11 @@ int ModifierVoiture(char *fichier, int n){
 
     do{
         do{
-            printf("Qu'elle voiture voulez vous modifier?\n");
+            printf("Quelle voiture voulez vous modifier?\n");
             printf("Veuillez entrez son id (ou 0 pour revenir au menu): ");
             scanf("%d", &id);
             if (id == 0) {return 0;}
-            ln = id_n(fichier, id, n);
+            ln = idV_n(fichier, id, n);
             if( ln == -1)
                 printf("Aucune voiture avec cet id!\n");
         }while(ln == -1);
@@ -264,9 +264,9 @@ int ModifierVoiture(char *fichier, int n){
     res2 = rename("ftmp.txt",fichier);
 
     if ( res1 == 0 && res2 == 0)
-        printf("La voiture %d a %ct%c supprim%ce avec succ%cs!\n", ln, 130,130,130,138); //Code ASCII: � : 130 - � : 138
+        printf("La voiture %d a %ct%c modifi%ce avec succ%cs!\n", ln, 130,130,130,138); //Code ASCII: � : 130 - � : 138
     else
-        printf("ERREUR: la voiture n'a pas pu %ctre supprim%ce!\n",136,130);
+        printf("ERREUR: la voiture n'a pas pu %ctre modifi%ce!\n",136,130);
 
     return 1;
 }
@@ -279,11 +279,11 @@ int SupprimerVoiture (char *fichier, int n){
 
     do{
         do{
-            printf("Qu'elle voiture voulez vous supprimer?\n");
+            printf("Quelle voiture voulez vous supprimer?\n");
             printf("Veuillez entrez son id (ou 0 pour revenir au menu): ");
             scanf("%d", &id);
             if (id == 0) {return 0;}
-            ln = id_n(fichier, id, n);
+            ln = idV_n(fichier, id, n);
             if( ln == -1){ printf("Aucune voiture avec cet id!\n"); }
         }while(ln == -1);
         AfficherVoiture(fichier, ln);
