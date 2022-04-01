@@ -5,119 +5,113 @@
 #include <string.h>
 #include "structures.h"
 #define MAX 1000
-#define SIZE 66
+#define CSIZE 125
 
-int id_n(char *fichier, int idVoiture, int nbrV){
-    FILE *fvoiture = NULL;
+int idC_n(char *fichier, int idClient, int nbrC){
+    FILE *fclient = NULL;
     int i;
     char str[5];
     int id, count, ln = -1;
 
-    fvoiture = fopen(fichier, "r");
-    if (fvoiture == NULL){
+    fclient = fopen(fichier, "r");
+    if (fclient == NULL){
         printf("ERREUR: Impossible d'ouvrir le fichier!\n");
         exit(0);
     }
 
-    rewind(fvoiture);
+    rewind(fclient);
     count = 0;
-    for(i=0; i<nbrV; i++){
-        fgets(str,5,fvoiture);
+    for(i=0; i<nbrC; i++){
+        fgets(str,5,fclient);
         id = atoi(str);
         count++;
-        if(id == idVoiture){
+        if(id == idClient){
             ln = count;
             break;
         }
-        fseek(fvoiture,SIZE-4,SEEK_CUR);
+        fseek(fclient,CSIZE-4,SEEK_CUR);
     }
 
-    fclose(fvoiture);
+    fclose(fclient);
 
     return ln;
 }
-void AfficherVoiture (char * fichier, int nbrV){
-    FILE * fvoiture;
+void AfficherClient (char * fichier, int nbrV){
+    FILE * fclient;
     int i;
     char car;
 
-    fvoiture = fopen(fichier, "r");
-    if (fvoiture == NULL){
+    fclient = fopen(fichier, "r");
+    if (fclient == NULL){
         printf("ERREUR: Impossible d'ouvrir le fichier!\n");
         exit(0);
     }
-    fseek(fvoiture,SIZE*(nbrV-1), SEEK_SET);
-    printf("Voiture %d:\n", nbrV);
+    fseek(fclient,CSIZE*(nbrV-1), SEEK_SET);
+    printf("Client %d:\n", nbrV);
     printf("\tId: ");
     for(i=0; i<4;i++){
-        car = fgetc(fvoiture);
+        car = fgetc(fclient);
         printf("%c", car);
     }
     printf("\n");
-    fseek(fvoiture,1,SEEK_CUR);
-    printf("\tMarque: ");
-    for(i=0; i<15;i++){
-        car = fgetc(fvoiture);
+    fseek(fclient,1,SEEK_CUR);
+    printf("\tNom: ");
+    for(i=0; i<20;i++){
+        car = fgetc(fclient);
         printf("%c", car);
     }
     printf("\n");
-    fseek(fvoiture,1,SEEK_CUR);
-    printf("\tModele: ");
-    for(i=0; i<15;i++){
-        car = fgetc(fvoiture);
+    fseek(fclient,1,SEEK_CUR);
+    printf("\tPr%cnom: ", 130);
+    for(i=0; i<20;i++){
+        car = fgetc(fclient);
         printf("%c", car);
     }
     printf("\n");
-    fseek(fvoiture,1,SEEK_CUR);
-    printf("\tCouleur: ");
-    for(i=0; i<7;i++){
-        car = fgetc(fvoiture);
+    fseek(fclient,1,SEEK_CUR);
+    printf("\tCIN: ");
+    for(i=0; i<10;i++){
+        car = fgetc(fclient);
         printf("%c", car);
     }
     printf("\n");
-    fseek(fvoiture,1,SEEK_CUR);
-    printf("\tNombre de Places: ");
-    for(i=0; i<2;i++){
-        car = fgetc(fvoiture);
+    fseek(fclient,1,SEEK_CUR);
+    printf("\tAdresse: ");
+    for(i=0; i<54;i++){
+        car = fgetc(fclient);
         printf("%c", car);
     }
     printf("\n");
-    fseek(fvoiture,1,SEEK_CUR);
-    printf("\tPrix: ");
-    for(i=0; i<12;i++){
-        car = fgetc(fvoiture);
-        printf("%c", car);
-    }
-    printf("\n");
-    fseek(fvoiture,1,SEEK_CUR);
-    printf("\tEn Location: ");
-    for(i=0; i<4;i++){
-        car = fgetc(fvoiture);
+    fseek(fclient,1,SEEK_CUR);
+    printf("\tTelephone: ");
+    for(i=0; i<10;i++){
+        car = fgetc(fclient);
         printf("%c", car);
     }
     printf("\n");
 
-    fclose(fvoiture);
+
+    fclose(fclient);
 
 }
-void ListeVoitures (char * fichier, int nombreVoiture){
-    FILE* fvoiture = NULL;
+void ListeClient (char * fichier, int nombreClient){
+    FILE* fclient = NULL;
     int n;
 
-    fvoiture = fopen(fichier, "r");
-    if (fvoiture == NULL){
+    fclient = fopen(fichier, "r");
+    if (fclient == NULL){
         printf("ERREUR: Impossible d'ouvrir le fichier!\n");
         exit(0);
     }
 
-    for(n=1; n<=nombreVoiture; n++){
-        AfficherVoiture(fichier,n);
+    for(n=1; n<=nombreClient; n++){
+        AfficherClient(fichier,n);
     }
 
-    fclose(fvoiture);
+    fclose(fclient);
 
 }
-void AjouterVoiture (char *fichier, int n){
+void AjouterClient (char *fichier, int n){
     FILE *fclient = NULL;
     Client C;
     int i, ln, lg;
@@ -132,7 +126,7 @@ void AjouterVoiture (char *fichier, int n){
     do{
         printf("\tid: ");
         scanf("%d", &C.idClient);
-        ln = id_n(fichier, C.idClient, n);
+        ln = idC_n(fichier, C.idClient, n);
         if(ln != -1)
             printf("L'id entr%c est d%cj%c utilis%c.\nVeuillez entrer une id unique!\n",130,130,133,130);
     }while(ln != -1);
@@ -150,7 +144,7 @@ void AjouterVoiture (char *fichier, int n){
     lg = strlen(C.nom);
     if(lg < 20){
         for (i=lg; i<20; i++)
-            strcat(V.marque, " ");
+            strcat(C.nom, " ");
     }
     fprintf(fclient,"%s:",C.nom);
     printf("\tPr%cnom: ",130);
@@ -162,39 +156,30 @@ void AjouterVoiture (char *fichier, int n){
     }
     fprintf(fclient,"%s:",C.prenom);
     printf("\tCIN: ");
-    scanf("%s", V.couleur);
-    lg = strlen(V.couleur);
-    if(lg < 7){
-        for (i=lg; i<7; i++)
-            strcat(V.marque, " ");
+    scanf("%s", C.cin);
+    lg = strlen(C.cin);
+    if(lg < 10){
+        for (i=lg; i<10; i++)
+            strcat(C.cin, " ");
     }
-    fprintf(fvoiture,"%s:",V.couleur);
-    printf("\tNombre de places: ");
-    scanf("%d", &V.nbplaces);
-    if (V.nbplaces < 10){
-        fprintf(fvoiture,"%d :",V.nbplaces);
-    } else {
-        fprintf(fvoiture,"%d:",V.nbplaces);
+    fprintf(fclient,"%s:",C.cin);
+    printf("\tAdresse: ");
+    fflush(stdin);
+    fgets(C.adresse,54,stdin);
+    lg = strlen(C.adresse);
+    C.adresse[lg-1] = '\0';
+    lg = strlen(C.adresse);
+    if(lg < 54){
+        for (i=lg; i<54; i++)
+            strcat(C.adresse, " ");
     }
-    printf("\tPrix du jour: ");
-    scanf("%d", &V.prixJour);
-    if (V.prixJour < 100){
-        fprintf(fvoiture,"%d DH/JOUR  :",V.prixJour);
-    } else if (V.prixJour < 1000){
-        fprintf(fvoiture,"%d DH/JOUR :",V.prixJour);
-    } else {
-        fprintf(fvoiture,"%d DH/JOUR:",V.prixJour);
-    }
-    printf("\tEn Location (Oui/Non): ");
-    scanf("%s", V.EnLocation);
-    lg = strlen(V.EnLocation);
-    if(lg < 3){
-        for (i=lg; i<3; i++)
-            strcat(V.EnLocation, " ");
-    }
-    fprintf(fclient,"%s\n",V.EnLocation);
+    fprintf(fclient, "%s:", C.adresse);
+    printf("\tTelephone (ex: 0666666666): ");
+    scanf("%d", &C.telephone);
+    fprintf(fclient,"0%d\n",C.telephone);
 
     fclose(fclient);
+
 
 }
 int ModifierClient(char *fichier, int n){
@@ -206,17 +191,17 @@ int ModifierClient(char *fichier, int n){
 
     do{
         do{
-            printf("Qu'elle voiture voulez vous modifier?\n");
+            printf("Quel client voulez vous modifier?\n");
             printf("Veuillez entrez son id (ou 0 pour revenir au menu): ");
             scanf("%d", &id);
             if (id == 0) {return 0;}
-            ln = id_n(fichier, id, n);
+            ln = idC_n(fichier, id, n);
             if( ln == -1)
-                printf("Aucune voiture avec cet id!\n");
+                printf("Aucun client avec cet id!\n");
         }while(ln == -1);
 
-        AfficherVoiture(fichier, ln);
-        printf("Voulez vous modifier cette voiture?\n");
+        AfficherClient(fichier, ln);
+        printf("Voulez vous modifier ce client?\n");
         printf("\t1: Oui \t\t2: Non\t\t3: Revenir au menu\n");
         printf("Votre choix(1, 2 ou 3): ");
         scanf("%d", &x);
@@ -227,7 +212,7 @@ int ModifierClient(char *fichier, int n){
     }while(x != 1 );
 
     ln--;
-    AjouterVoiture("modification.txt", ln);
+    AjouterClient("modification.txt", ln);
     ln++;
 
     line = fopen("modification.txt", "r");
@@ -263,9 +248,9 @@ int ModifierClient(char *fichier, int n){
     res2 = rename("ftmp.txt",fichier);
 
     if ( res1 == 0 && res2 == 0)
-        printf("La voiture %d a %ct%c supprim%ce avec succ%cs!\n", ln, 130,130,130,138); //Code ASCII: � : 130 - � : 138
+        printf("Le client %d a %ct%c modifi%c avec succ%cs!\n", ln, 130,130,130,138); //Code ASCII: � : 130 - � : 138
     else
-        printf("ERREUR: la voiture n'a pas pu %ctre supprim%ce!\n",136,130);
+        printf("ERREUR: le client n'a pas pu %ctre modifi%c!\n",136,130);
 
     return 1;
 }
@@ -278,15 +263,15 @@ int SupprimerClient (char *fichier, int n){
 
     do{
         do{
-            printf("Qu'elle voiture voulez vous supprimer?\n");
+            printf("Quel client voulez vous supprimer?\n");
             printf("Veuillez entrez son id (ou 0 pour revenir au menu): ");
             scanf("%d", &id);
             if (id == 0) {return 0;}
-            ln = id_n(fichier, id, n);
-            if( ln == -1){ printf("Aucune voiture avec cet id!\n"); }
+            ln = idC_n(fichier, id, n);
+            if( ln == -1){ printf("Aucun client avec cet id!\n"); }
         }while(ln == -1);
-        AfficherVoiture(fichier, ln);
-        printf("Voulez vous supprimer cette voiture?\n");
+        AfficherClient(fichier, ln);
+        printf("Voulez vous supprimer ce client?\n");
         printf("\t1: Oui \t\t2: Non\t\t3: Revenir au menu\n");
         printf("Votre choix(1, 2 ou 3): ");
         scanf("%d", &x);
@@ -318,9 +303,9 @@ int SupprimerClient (char *fichier, int n){
     res1 = remove(fichier);
     res2 = rename("ftmp.txt", fichier);
     if ( res1 == 0 && res2 == 0)
-        printf("La voiture %d a %ct%c supprim%ce avec succ%cs!\n", ln, 130,130,130,138); //Code ASCII: � : 130 - � : 138
+        printf("Le client %d a %ct%c supprim%c avec succ%cs!\n", ln, 130,130,130,138); //Code ASCII: � : 130 - � : 138
     else
-        printf("ERREUR: la voiture n'a pas pu %ctre supprim%ce!\n",136,130);
+        printf("ERREUR: le client n'a pas pu %ctre supprim%c!\n",136,130);
     return 1;
 }
 int nbrClient (char *fichier){
@@ -345,3 +330,4 @@ int nbrClient (char *fichier){
 
 
 #endif // GESTIONCLIENT_H_INCLUDED
+
