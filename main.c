@@ -24,16 +24,18 @@ void menu_principal (char *ficV, char *ficC, char *ficCL) {
     int x;
     do {
         system("cls");
-        printf("\n\t\t\t\t\t---------------Menu Principal---------------\n");
-        printf("\t\t\t\t\t============================================");
-        printf("\n");
-        printf("\t\t\t\t\tLocation...................................1\n");
-        printf("\t\t\t\t\tGestion voitures...........................2\n");
-        printf("\t\t\t\t\tGestion clients............................3\n");
-        printf("\t\t\t\t\tQuitter....................................4\n");
-        printf("\n");
-        printf("\t\t\t\t\t============================================");
-        printf("\n\t\t\t\t\t\t\t Votre choix: ");
+        printf("\n \t\t\t\t\t\t  \xda\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xbf");
+        printf("\n \t\t\t\t\t\t  \xb3 Menu Principal  \xb3");
+        printf("\n \t\t\t\t\t\t  \xc0\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xd9");
+        printf("\n \t\t\t\t\xc9\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xbb");
+        printf("\n \t\t\t\t\xba\t\t\t\t\t\t       \xba");
+        printf("\n \t\t\t\t\xba\tLocation..............................1        \xba");
+        printf("\n \t\t\t\t\xba\tGestion voitures......................2        \xba");
+        printf("\n \t\t\t\t\xba\tGestion clients.......................3        \xba");
+        printf("\n \t\t\t\t\xba\tQuitter...............................4        \xba");
+        printf("\n \t\t\t\t\xba\t\t\t\t\t\t       \xba");
+        printf("\n \t\t\t\t\xc8\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xbc");
+        printf("\n\n\t\t\t\t\t\t    Votre choix: ");
         scanf("%d", &x);
         switch (x) {
             case 1:
@@ -52,18 +54,20 @@ void menu_loc (char *ficCL) {
     int x;
     do {
         system("cls");
-        printf("\n\t\t\t\t\t---------------Location d'une voiture---------------\n");
-        printf("\t\t\t\t\t====================================================");
-        printf("\n");
-        printf("\t\t\t\t\tVisualiser contrat.................................1\n");
-        printf("\t\t\t\t\tLouer voiture......................................2\n");
-        printf("\t\t\t\t\tRetourner voiture..................................3\n");
-        printf("\t\t\t\t\tModifier contrat...................................4\n");
-        printf("\t\t\t\t\tSupprimer contrat..................................5\n");
-        printf("\t\t\t\t\tRetour.............................................6\n");
-        printf("\n");
-        printf("\t\t\t\t\t====================================================");
-        printf("\n\t\t\t\t\t\t\t Votre choix: ");
+        printf("\n \t\t\t\t\t      \xda\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xbf");
+        printf("\n \t\t\t\t\t      \xb3 Location d'une voiture  \xb3");
+        printf("\n \t\t\t\t\t      \xc0\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xd9");
+        printf("\n \t\t\t\t\xc9\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xbb");
+        printf("\n \t\t\t\t\xba\t\t\t\t\t\t       \xba");
+        printf("\n \t\t\t\t\xba\tVisualiser un contrat.................1        \xba");
+        printf("\n \t\t\t\t\xba\tLouer une voiture.....................2        \xba");
+        printf("\n \t\t\t\t\xba\tRetourner une voiture.................3        \xba");
+        printf("\n \t\t\t\t\xba\tModifier un contrat...................4        \xba");
+        printf("\n \t\t\t\t\xba\tSupprimer un contrat..................5        \xba");
+        printf("\n \t\t\t\t\xba\tRetour................................6        \xba");
+        printf("\n \t\t\t\t\xba\t\t\t\t\t\t       \xba");
+        printf("\n \t\t\t\t\xc8\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xbc");
+        printf("\n\n\t\t\t\t\t\t    Votre choix: ");
         scanf("%d", &x);
         switch (x) {
             case 1:
@@ -93,17 +97,19 @@ void menu_gv (char *ficV) {
     int x, n;
     do {
         system("cls");
-        printf("\n\t\t\t\t\t---------------Gestion des Voitures---------------\n");
-        printf("\t\t\t\t\t====================================================");
-        printf("\n");
-        printf("\t\t\t\t\tListe des voitures.................................1\n");
-        printf("\t\t\t\t\tAjouter voiture....................................2\n");
-        printf("\t\t\t\t\tModifier voiture...................................3\n");
-        printf("\t\t\t\t\tSupprimer voiture..................................4\n");
-        printf("\t\t\t\t\tRetour.............................................5\n");
-        printf("\n");
-        printf("\t\t\t\t\t====================================================");
-        printf("\n\t\t\t\t\t\t\t Votre choix: ");
+        printf("\n \t\t\t\t\t\t \xda\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xbf");
+        printf("\n \t\t\t\t\t\t \xb3 Gestion des Voitures  \xb3");
+        printf("\n \t\t\t\t\t\t \xc0\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xd9");
+        printf("\n \t\t\t\t\xc9\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xbb");
+        printf("\n \t\t\t\t\xba\t\t\t\t\t\t       \xba");
+        printf("\n \t\t\t\t\xba\tListe des voitures....................1        \xba");
+        printf("\n \t\t\t\t\xba\tAjouter une voiture...................2        \xba");
+        printf("\n \t\t\t\t\xba\tModifier une voiture..................3        \xba");
+        printf("\n \t\t\t\t\xba\tSupprimer une voiture.................4        \xba");
+        printf("\n \t\t\t\t\xba\tRetour................................5        \xba");
+        printf("\n \t\t\t\t\xba\t\t\t\t\t\t       \xba");
+        printf("\n \t\t\t\t\xc8\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xbc");
+        printf("\n\n\t\t\t\t\t\t    Votre choix: ");
         scanf("%d", &x);
         switch (x) {
             case 1:
@@ -142,17 +148,19 @@ void menu_gc (char *ficC) {
     int x, n;
     do {
         system("cls");
-        printf("\n\t\t\t\t\t---------------Gestion des Clients---------------\n");
-        printf("\t\t\t\t\t===================================================");
-        printf("\n");
-        printf("\t\t\t\t\tListe des clients.................................1\n");
-        printf("\t\t\t\t\tAjouter client....................................2\n");
-        printf("\t\t\t\t\tModifier client...................................3\n");
-        printf("\t\t\t\t\tSupprimer client..................................4\n");
-        printf("\t\t\t\t\tRetour............................................5\n");
-        printf("\n");
-        printf("\t\t\t\t\t====================================================");
-        printf("\n\t\t\t\t\t\t\t Votre choix: ");
+        printf("\n \t\t\t\t\t\t \xda\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xbf");
+        printf("\n \t\t\t\t\t\t \xb3 Gestion des Clients  \xb3");
+        printf("\n \t\t\t\t\t\t \xc0\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xc4\xd9");
+        printf("\n \t\t\t\t\xc9\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xbb");
+        printf("\n \t\t\t\t\xba\t\t\t\t\t\t       \xba");
+        printf("\n \t\t\t\t\xba\tListe des clients.....................1        \xba");
+        printf("\n \t\t\t\t\xba\tAjouter un client.....................2        \xba");
+        printf("\n \t\t\t\t\xba\tModifier un client....................3        \xba");
+        printf("\n \t\t\t\t\xba\tSupprimer un client...................4        \xba");
+        printf("\n \t\t\t\t\xba\tRetour................................5        \xba");
+        printf("\n \t\t\t\t\xba\t\t\t\t\t\t       \xba");
+        printf("\n \t\t\t\t\xc8\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xcd\xbc");
+        printf("\n\n\t\t\t\t\t\t    Votre choix: ");
         scanf("%d", &x);
         switch (x) {
             case 1:
