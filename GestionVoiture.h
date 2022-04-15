@@ -1,222 +1,177 @@
-#ifndef GESTIONVOITURE_H_INCLUDED
-#define GESTIONVOITURE_H_INCLUDED
+#ifndef GESTIONVOITURES_H_INCLUDED
+#define GESTIONVOITURES_H_INCLUDED
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "structures.h"
-#define MAX 1000
-#define VSIZE 66
+//Calcule Le nombre de voitures enregistrer dans un fichier
+int V_ArraySize (char *fname){
+    FILE *fvoiture;
+    voiture V;
+    int c=0; //c = SIZE_Variable
 
-int idV_n(char *fichier, int idVoiture, int nbrV){
-    FILE *fvoiture = NULL;
-    int i;
-    char str[5];
-    int id, count, ln = -1;
+    fvoiture = fopen(fname, "rb");
+    if(fvoiture == NULL){
+        return 0;
+    }
 
-    fvoiture = fopen(fichier, "r");
-    if (fvoiture == NULL){
-        printf("ERREUR: Impossible d'ouvrir le fichier!\n");
+    while(fread(&V, sizeof(voiture), 1, fvoiture)){
+        c++;
+    }
+
+    fclose(fvoiture);
+
+    return c;
+}
+//Recuperer Les informations sur les voitures
+voiture * V_ExtractData (char * fname){
+    FILE *fvoiture;
+    voiture *TV, V; //TV: Tableau Voiture
+    int c=0;
+
+    fvoiture = fopen(fname, "rb");
+    if(fvoiture == NULL){
+        printf("ERREUR: Impossible d'ouvrir ce fichier!\n");
         exit(0);
     }
 
-    rewind(fvoiture);
-    count = 0;
-    for(i=0; i<nbrV; i++){
-        fgets(str,5,fvoiture);
-        id = atoi(str);
-        count++;
-        if(id == idVoiture){
-            ln = count;
-            break;
+    TV = (voiture *) malloc(sizeof(voiture));
+    while(fread(&V, sizeof(voiture), 1, fvoiture)){
+        TV[c] = V;
+        c++;
+        TV = (voiture *) realloc(TV,(c+1)*sizeof(voiture));
+    }
+
+    fclose(fvoiture);
+
+    return TV;
+
+}
+//Trouver La voiture par Id
+int V_FindId (char *fname, int id){
+    voiture *TABV;
+    int i, N;
+
+    TABV = V_ExtractData(fname);
+    N = V_ArraySize(fname);
+
+    for(i=0; i<N; i++){
+        if (TABV[i].idVoiture == id){
+            return i;
         }
-        fseek(fvoiture,VSIZE-4,SEEK_CUR);
     }
 
-    fclose(fvoiture);
-
-    return ln;
+    return -2;
 }
-void AfficherVoiture (char * fichier, int nbrV){
-    FILE * fvoiture;
-    int i;
-    char car;
-
-    fvoiture = fopen(fichier, "r");
-    if (fvoiture == NULL){
-        printf("ERREUR: Impossible d'ouvrir le fichier!\n");
-        exit(0);
-    }
-    fseek(fvoiture,VSIZE*(nbrV-1), SEEK_SET);
-    printf("Voiture %d:\n", nbrV);
-    printf("\tId: ");
-    for(i=0; i<4;i++){
-        car = fgetc(fvoiture);
-        printf("%c", car);
-    }
-    printf("\n");
-    fseek(fvoiture,1,SEEK_CUR);
-    printf("\tMarque: ");
-    for(i=0; i<15;i++){
-        car = fgetc(fvoiture);
-        printf("%c", car);
-    }
-    printf("\n");
-    fseek(fvoiture,1,SEEK_CUR);
-    printf("\tModele: ");
-    for(i=0; i<15;i++){
-        car = fgetc(fvoiture);
-        printf("%c", car);
-    }
-    printf("\n");
-    fseek(fvoiture,1,SEEK_CUR);
-    printf("\tCouleur: ");
-    for(i=0; i<7;i++){
-        car = fgetc(fvoiture);
-        printf("%c", car);
-    }
-    printf("\n");
-    fseek(fvoiture,1,SEEK_CUR);
-    printf("\tNombre de Places: ");
-    for(i=0; i<2;i++){
-        car = fgetc(fvoiture);
-        printf("%c", car);
-    }
-    printf("\n");
-    fseek(fvoiture,1,SEEK_CUR);
-    printf("\tPrix: ");
-    for(i=0; i<12;i++){
-        car = fgetc(fvoiture);
-        printf("%c", car);
-    }
-    printf("\n");
-    fseek(fvoiture,1,SEEK_CUR);
-    printf("\tEn Location: ");
-    for(i=0; i<4;i++){
-        car = fgetc(fvoiture);
-        printf("%c", car);
-    }
-    printf("\n");
-
-    fclose(fvoiture);
-
+void AfficherVoiture (voiture V){
+    printf("Voiture ID: %d\n", V.idVoiture);
+    printf("\tMarque: %s\n",V.marque);
+    printf("\tNom: %s\n",V.nomVoiture);
+    printf("\tCouleur: %s\n",V.couleur);
+    printf("\tNombre de places: %d\n",V.nbplaces);
+    printf("\tPrix par jour: %d DH/JOUR\n",V.prixJour);
+    printf("\tEn Location: %s\n",V.EnLocation);
 }
-void ListeVoitures (char * fichier, int nombreVoiture){
-    FILE* fvoiture = NULL;
-    int n;
+void AjouterVoiture(char * fname){
+    FILE *fvoiture;
+    voiture V;
+    int lg,i;
 
-    fvoiture = fopen(fichier, "r");
-    if (fvoiture == NULL){
-        printf("ERREUR: Impossible d'ouvrir le fichier!\n");
+    fvoiture = fopen(fname, "ab");
+    if(fvoiture == NULL){
+        printf("ERREUR: Impossible d'ouvrir ce fichier!\n");
         exit(0);
     }
 
-    for(n=1; n<=nombreVoiture; n++){
-        AfficherVoiture(fichier,n);
-    }
+    printf("Entrez les informations de la voiture:\n");
 
-    fclose(fvoiture);
-
-}
-void AjouterVoiture (char *fichier, int n){
-    FILE *fvoiture = NULL;
-    Voiture V;
-    int i, ln, lg;
-
-    fvoiture = fopen(fichier, "a");
-    if (fvoiture == NULL){
-        printf("ERREUR: Impossible d'ouvrir le fichier!\n");
-        exit(0);
-    }
-
-    printf("Voiture %d:\n", n+1);
+    //Tester si l'id entre est unique
     do{
-        printf("\tid: ");
-        scanf("%d", &V.idVoiture);
-        ln = idV_n(fichier, V.idVoiture, n);
-        if(ln != -1)
-            printf("L'id entr%c est d%cj%c utilis%c.\nVeuillez entrer une id unique!\n",130,130,133,130);
-    }while(ln != -1);
-    if (V.idVoiture< 10){
-        fprintf(fvoiture,"%d   :",V.idVoiture);
-    } else if (V.idVoiture < 100){
-        fprintf(fvoiture,"%d  :",V.idVoiture);
-    } else if (V.idVoiture < 1000){
-        fprintf(fvoiture,"%d :",V.idVoiture);
-    } else {
-        fprintf(fvoiture,"%d:",V.idVoiture);
-    }
+        srand(time(NULL));
+        V.idVoiture = rand() % (10000 - 0 + 1) + 0; //n = rand() % (max - min + 1) + min;
+        i = V_FindId(fname, V.idVoiture);
+    }while(i != -2);
+
+    printf("Voiture ID: %d\n", V.idVoiture);
+
     printf("\tMarque: ");
-    scanf("%s", V.marque);
+    fflush(stdin);
+    fgets(V.marque, 15, stdin); //La marque peut etre un nom compose
     lg = strlen(V.marque);
-    if(lg < 15){
-        for (i=lg; i<15; i++)
-            strcat(V.marque, " ");
-    }
-    fprintf(fvoiture,"%s:",V.marque);
-    printf("\tModele: ");
-    scanf("%s", V.nomVoiture);
+    V.marque[lg-1] = '\0'; //La chaine de caracteres recuperer par fgets() se termine par '\n'
+
+    printf("\tNom: ");
+    fflush(stdin);
+    fgets(V.nomVoiture, 15, stdin);
     lg = strlen(V.nomVoiture);
-    if(lg < 15){
-        for (i=lg; i<15; i++)
-            strcat(V.nomVoiture, " ");
-    }
-    fprintf(fvoiture,"%s:",V.nomVoiture);
+    V.nomVoiture[lg-1] = '\0';
+
     printf("\tCouleur: ");
-    scanf("%s", V.couleur);
-    lg = strlen(V.couleur);
-    if(lg < 7){
-        for (i=lg; i<7; i++)
-            strcat(V.marque, " ");
-    }
-    fprintf(fvoiture,"%s:",V.couleur);
+    scanf("%s",V.couleur);
+
     printf("\tNombre de places: ");
-    scanf("%d", &V.nbplaces);
-    if (V.nbplaces < 10){
-        fprintf(fvoiture,"%d :",V.nbplaces);
-    } else {
-        fprintf(fvoiture,"%d:",V.nbplaces);
-    }
-    printf("\tPrix du jour: ");
-    scanf("%d", &V.prixJour);
-    if (V.prixJour < 100){
-        fprintf(fvoiture,"%d DH/JOUR  :",V.prixJour);
-    } else if (V.prixJour < 1000){
-        fprintf(fvoiture,"%d DH/JOUR :",V.prixJour);
-    } else {
-        fprintf(fvoiture,"%d DH/JOUR:",V.prixJour);
-    }
-    printf("\tEn Location (Oui/Non): ");
-    scanf("%s", V.EnLocation);
-    lg = strlen(V.EnLocation);
-    if(lg < 3){
-        for (i=lg; i<3; i++)
-            strcat(V.EnLocation, " ");
-    }
-    fprintf(fvoiture,"%s\n",V.EnLocation);
+    scanf("%d",&V.nbplaces);
+
+    printf("\tPrix par jour: ");
+    scanf("%d",&V.prixJour);
+
+    /*printf("\tEst ce qu'il est en location? ( Oui || Non )\n");
+    printf("\tVotre choix: ");
+    scanf("%s",V.EnLocation);*/
+    //L'etat enLocation est determine automatiquement
+    //Si la voiture est louer (menu location) il egale a Oui
+    //Sinon il egale a Non et par defaut il egale a Non
+
+    strcpy(V.EnLocation,"Non");
+
+    fwrite(&V,sizeof(voiture), 1, fvoiture);
 
     fclose(fvoiture);
 
+    printf("La voiture a %ct%c ajout%ce avec succ%cs!\n", 130,130,130,138);
+
 }
-int ModifierVoiture(char *fichier, int n){
-    FILE * fvoiture;
-    FILE * ftmp;
-    FILE * line;
-    int id,ln,x;
-    char chaine[MAX],nouveau[MAX];
+void ListeVoitures (char *fname){
+    FILE *fvoiture;
+    voiture V;
+    int c=0, N;
+
+    fvoiture = fopen(fname, "rb");
+    if(fvoiture == NULL){
+        printf("ERREUR: Impossible d'ouvrir ce fichier!\n");
+        exit(0);
+    }
+
+    N = V_ArraySize(fname);
+    if(N == 0){
+        printf("Aucune voiture n'a %ct%c ajout%ce.\nVeuillez ajouter des voitures\n", 130,130, 130);
+    }else{
+        while(fread(&V, sizeof(voiture), 1, fvoiture)){
+            AfficherVoiture(V);
+            c++;
+        }
+
+        fclose(fvoiture);
+    }
+
+}
+int ModifierVoiture (char * fname){
+    FILE * ftmp = NULL;
+    voiture *TABV;
+    int x, i, id, lg, N;
+
+    TABV = V_ExtractData(fname);
 
     do{
         do{
             printf("Quelle voiture voulez vous modifier?\n");
-            printf("Veuillez entrez son id (ou 0 pour revenir au menu): ");
+            printf("Veuillez entrez son id (ou -1 pour revenir au menu): ");
             scanf("%d", &id);
-            if (id == 0) {return 0;}
-            ln = idV_n(fichier, id, n);
-            if( ln == -1)
+            if (id == -1) {return 0;}
+            i = V_FindId(fname,id);
+            if( i == -2)
                 printf("Aucune voiture avec cet id!\n");
-        }while(ln == -1);
+        }while(i == -2);
 
-        AfficherVoiture(fichier, ln);
+        AfficherVoiture(TABV[i]);
+
         printf("Voulez vous modifier cette voiture?\n");
         printf("\t1: Oui \t\t2: Non\t\t3: Revenir au menu\n");
         printf("Votre choix(1, 2 ou 3): ");
@@ -227,121 +182,111 @@ int ModifierVoiture(char *fichier, int n){
 
     }while(x != 1 );
 
-    ln--;
-    AjouterVoiture("modification.txt", ln);
-    ln++;
+    printf("Entrez les nouvelles informations de la voiture:\n");
 
-    line = fopen("modification.txt", "r");
-    if (line == NULL){
-        printf("ERREUR: Impossible d'ouvrir le fichier!\n");
+    printf("Voiture ID: %d\n", TABV[i].idVoiture);
+
+    printf("\tMarque: ");
+    fflush(stdin);
+    fgets(TABV[i].marque, 15, stdin);
+    lg = strlen(TABV[i].marque);
+    TABV[i].marque[lg-1] = '\0';
+
+    printf("\tNom: ");
+    fflush(stdin);
+    fgets(TABV[i].nomVoiture, 15, stdin);
+    lg = strlen(TABV[i].nomVoiture);
+    TABV[i].nomVoiture[lg-1] = '\0';
+
+    printf("\tCouleur: ");
+    scanf("%s",TABV[i].couleur);
+
+    printf("\tNombre de places: ");
+    scanf("%d",&TABV[i].nbplaces);
+
+    printf("\tPrix par jour: ");
+    scanf("%d",&TABV[i].prixJour);
+
+    printf("\tEst ce qu'il est en location? ( Oui || Non )\n");
+    printf("\tVotre choix: ");
+    scanf("%s",TABV[i].EnLocation);
+
+    ftmp = fopen("tmp.dat", "wb");
+    if(ftmp == NULL){
+        printf("ERREUR: Impossible d'ouvrir ce fichier!\n");
         exit(0);
     }
-    fgets(nouveau, MAX, line);
-    fclose(line);
-    remove("modification.txt");
 
-    fvoiture = fopen(fichier, "r");
-    ftmp = fopen("ftmp.txt", "w");
+    N = V_ArraySize(fname);
+    fwrite(TABV, sizeof(voiture), N, ftmp);
 
-    if (fvoiture == NULL || ftmp == NULL){
-        printf("\nImpossible d'ouvrir le fichier.\n");
-        exit(0);
-    }
-
-    int count = 0;
-    while ((fgets(chaine, MAX, fvoiture)) != NULL){
-        count++;
-        if (count == ln){
-            fputs(nouveau, ftmp);
-        }else
-            fputs(chaine, ftmp);
-    }
-    fclose(fvoiture);
     fclose(ftmp);
 
     int res1, res2;
-    res1 = remove(fichier);
-    res2 = rename("ftmp.txt",fichier);
+    res1 = remove(fname);   //Suppression fichier original
+    res2 = rename("tmp.dat", fname);    //Renommer le fichier temporaire avec le nom d'original
 
     if ( res1 == 0 && res2 == 0)
-        printf("La voiture %d a %ct%c modifi%ce avec succ%cs!\n", ln, 130,130,130,138); //Code ASCII: � : 130 - � : 138
+        printf("La voiture a %ct%c modifi%ce avec succ%cs!\n", 130,130,130,138); //Code ASCII: e (accent aigue) : 130 - e (accent grave) : 138
     else
         printf("ERREUR: la voiture n'a pas pu %ctre modifi%ce!\n",136,130);
 
+
     return 1;
 }
-int SupprimerVoiture (char *fichier, int n){
-    FILE * fvoiture;
-    FILE * ftmp;
+int SupprimerVoiture (char * fname){
+    FILE * ftmp = NULL;
+    voiture *TABV;
+    int x, i, j, id, N;
 
-    int x, ln, id, count;
-    char chaine[MAX];
+    TABV = V_ExtractData(fname);
 
     do{
         do{
             printf("Quelle voiture voulez vous supprimer?\n");
-            printf("Veuillez entrez son id (ou 0 pour revenir au menu): ");
+            printf("Veuillez entrez son id (ou -1 pour revenir au menu): ");
             scanf("%d", &id);
-            if (id == 0) {return 0;}
-            ln = idV_n(fichier, id, n);
-            if( ln == -1){ printf("Aucune voiture avec cet id!\n"); }
-        }while(ln == -1);
-        AfficherVoiture(fichier, ln);
+            if (id == -1) {return 0;}
+            i = V_FindId(fname,id);
+            if( i == -2)
+                printf("Aucune voiture avec cet id!\n");
+        }while(i == -2);
+
+        AfficherVoiture(TABV[i]);
+
         printf("Voulez vous supprimer cette voiture?\n");
         printf("\t1: Oui \t\t2: Non\t\t3: Revenir au menu\n");
         printf("Votre choix(1, 2 ou 3): ");
         scanf("%d", &x);
 
-        if(x == 3) return 0;
+        if(x == 3)
+            return 0;
 
     }while(x != 1 );
 
-    fvoiture = fopen(fichier, "r");
-    ftmp = fopen("ftmp.txt", "w");
-
-    if (fvoiture == NULL || ftmp == NULL){
-        printf("\nImpossible d'ouvrir le fichier.\n");
+    ftmp = fopen("tmp.dat", "wb");
+    if(ftmp == NULL){
+        printf("ERREUR: Impossible d'ouvrir ce fichier!\n");
         exit(0);
     }
 
-    count = 0;
-    while ((fgets(chaine, MAX, fvoiture)) != NULL){
-        count++;
-        if (count == ln)
-            fputs("", ftmp);
-        else
-            fputs(chaine, ftmp);
+    N = V_ArraySize(fname);
+    for(j=0; j<N; j++){
+        if (j != i)
+            fwrite(&TABV[j], sizeof(voiture), 1, ftmp);
     }
-
-    fclose(fvoiture);
     fclose(ftmp);
+
     int res1, res2;
-    res1 = remove(fichier);
-    res2 = rename("ftmp.txt", fichier);
+    res1 = remove(fname);
+    res2 = rename("tmp.dat", fname);
+
     if ( res1 == 0 && res2 == 0)
-        printf("La voiture %d a %ct%c supprim%ce avec succ%cs!\n", ln, 130,130,130,138); //Code ASCII: � : 130 - � : 138
+        printf("La voiture a %ct%c supprim%ce avec succ%cs!\n", 130,130,130,138);
     else
         printf("ERREUR: la voiture n'a pas pu %ctre supprim%ce!\n",136,130);
+
     return 1;
 }
-int nbrVoiture (char *fichier){
-    FILE * fvoiture;
-    char chaine[MAX];
-    int count = 0;
 
-    fvoiture = fopen(fichier, "r");
-    if (fvoiture == NULL){
-        printf("ERREUR: Impossible d'ouvrir le fichier!\n");
-        exit(0);
-    }
-
-    while(fgets(chaine, MAX, fvoiture) != NULL){
-        count++;
-    }
-
-    fclose(fvoiture);
-
-    return count;
-}
-
-#endif // GESTIONVOITURE_H_INCLUDED
+#endif // GESTIONVOITURES_H_INCLUDED
