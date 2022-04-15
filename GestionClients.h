@@ -61,7 +61,7 @@ int C_FindId (char *fname, int id){
     return -2;
 }
 void AfficherClient (client C){
-    printf("Client ID: %d\n", C.idClient);
+    printf("Client ID %d:\n", C.idClient);
     printf("\tNom: %s\n",C.nom);
     printf("\tPr%cnom: %s\n", 130, C.prenom);
     printf("\tCIN: %s\n",C.cin);
@@ -124,17 +124,16 @@ void ListeClients (char *fname){
     client C;
     int c=0, N;
 
-    fclient = fopen(fname, "rb");
-    if(fclient == NULL){
-        printf("ERREUR: Impossible d'ouvrir ce fichier!\n");
-        exit(0);
-    }
-
     N = C_ArraySize(fname);
 
     if(N == 0){
         printf("Aucun client n'a %ct%c ajout%c.\nVeuillez ajouter des clients!\n", 130,130, 130);
     }else{
+        fclient = fopen(fname, "rb");
+        if(fclient == NULL){
+            printf("ERREUR: Impossible d'ouvrir ce fichier!\n");
+            exit(0);
+        }
         while(fread(&C, sizeof(client), 1, fclient)){
             AfficherClient(C);
             c++;
@@ -149,7 +148,6 @@ int ModifierClient (char * fname){
     client *TABC;
     int x, i, id, lg, N;
 
-    TABC = C_ExtractData(fname);
 
     do{
         do{
@@ -162,6 +160,7 @@ int ModifierClient (char * fname){
                 printf("Aucun client avec cet id!\n");
         }while(i == -2);
 
+        TABC = C_ExtractData(fname);
         AfficherClient(TABC[i]);
 
         printf("Voulez vous modifier ce client?\n");
@@ -230,8 +229,6 @@ int SupprimerClient (char * fname){
     client *TABC;
     int x, i, j, id, N;
 
-    TABC = C_ExtractData(fname);
-
     do{
         do{
             printf("Quel client voulez vous supprimer?\n");
@@ -243,6 +240,7 @@ int SupprimerClient (char * fname){
                 printf("Aucun client avec cet id!\n");
         }while(i == -2);
 
+        TABC = C_ExtractData(fname);
         AfficherClient(TABC[i]);
 
         printf("Voulez vous supprimer ce client?\n");
