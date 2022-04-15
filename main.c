@@ -24,7 +24,7 @@ int main () {
     return 0;
 }
 
-void menu_principal (char *ficV, char *ficC, char *ficCL) {
+void menu_principal (char *ficV, char *ficC, char *ficCL){
     int x;
     do {
         system("cls");
@@ -76,6 +76,7 @@ void menu_loc (char *ficCL, char *ficC, char *ficV) {
         switch (x) {
             case 1:
                 system("cls");
+                //ListeContrats(ficCL);
                 VisualiserContrat(ficCL);
                 printf("\nAppuyer sur une touche pour revenir au menu!\n");
                 getch();
@@ -198,5 +199,6 @@ void menu_gc (char *ficC) {
                 getch();
                 break;
         }
-    } while (x!=5);
+
+    }while(x!=5);
 }
