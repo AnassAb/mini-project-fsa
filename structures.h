@@ -14,7 +14,7 @@ typedef struct Voiture{
     int nbplaces;
     int prixJour;
     char EnLocation[4];
-}Voiture;
+}voiture;
 typedef struct contratLocation{
     float numContrat;
     int idVoiture;
@@ -22,7 +22,7 @@ typedef struct contratLocation{
     date debut;
     date fin;
     int cout;
-}Contrat;
+}contrat;
 typedef struct Client{
     int idClient;
     char nom[20];
@@ -30,6 +30,7 @@ typedef struct Client{
     char cin[10];
     char adresse[55];
     int telephone;
-}Client;
+}client;
+
 
 #endif // STRUCTURES_H_INCLUDED
