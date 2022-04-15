@@ -66,7 +66,7 @@ int CL_FindNC (char *fname, float NC){
     return -2;
 }
 void AfficherContrat (contrat CL){
-    printf("Contrat N%c: %f\n", 248, CL.numContrat);
+    printf("\nContrat N%c %f:\n", 248, CL.numContrat);
     printf("\tId Voiture Lou%ce: %d\n", 130, CL.idVoiture);
     printf("\tId Client: %d\n", CL.idClient);
     printf("\tDate de debut: %d/%d/%d\n", CL.debut.jour, CL.debut.mois, CL.debut.annee);
@@ -79,7 +79,7 @@ int VisualiserContrat (char *fname){
     float NC;
 
     N = CL_ArraySize(fname);
-    TCL = CL_ExtractData(fname);
+
 
     if(N == 0){
         printf("Aucun contrat n'a %ct%c ajout%c.\n", 130,130, 130);
@@ -91,6 +91,7 @@ int VisualiserContrat (char *fname){
             if (i == -2){printf("Aucun contrat avec ce num%cro!\n", 130);}
         }while(i == -2);
 
+        TCL = CL_ExtractData(fname);
         AfficherContrat(TCL[i]);
     }
 
@@ -99,7 +100,7 @@ int VisualiserContrat (char *fname){
 //Verifier si le client existe
 int VerifyC (client C, char *fclient){
     client *TC;
-    int N, i;
+    int N, i, x;
 
     N = C_ArraySize(fclient);
     TC = C_ExtractData(fclient);
@@ -109,7 +110,15 @@ int VerifyC (client C, char *fclient){
     }else{
         for(i=0; i<N; i++){
             if(strcmp(TC[i].nom,C.nom) == 0 && strcmp(TC[i].prenom,C.prenom) == 0){
-                return i;
+                printf("\nProfil:\n");
+                AfficherClient(TC[i]);
+                printf("\nVoulez vous continuer avec les informations figurez dans ce profil?\n");
+                printf("\n1: Oui, c'est moi\t\t2: Non, Ce n'est pas mon profil\n");
+                printf("\nVotre choix: ");
+                scanf("%d", &x);
+                if( x == 1){
+                    return i;
+                }
             }
         }
     }
@@ -140,20 +149,41 @@ int VerifyV (voiture V, char *fvoiture){
 //Verifier si la voiture est disponiblle
 int VerifyDispV (voiture V, char *fvoiture){
     voiture *TV;
-    int N, i;
+    int N, i, id;
 
     N = V_ArraySize(fvoiture);
     TV = V_ExtractData(fvoiture);
 
+    int T[N], c=0, j = 0, v;
+
     if(N == 0){
         return -1;
-    }else{
-        for(i=0; i<N; i++){
-            if(strcmp(TV[i].nomVoiture,V.nomVoiture) == 0 && strcmp(TV[i].marque, V.marque) == 0 && strcmp(TV[i].EnLocation, "Non") == 0 ){
-                return i;
-            }
+    }
+
+    for(i=0; i<N; i++){
+        if(strcmp(TV[i].nomVoiture,V.nomVoiture) == 0 && strcmp(TV[i].marque, V.marque) == 0 && strcmp(TV[i].EnLocation, "Non") == 0 ){
+            printf("\n");
+            AfficherVoiture(TV[i]);
+            c++;
+            T[j] = TV[i].idVoiture;
+            j++;
         }
     }
+
+
+    if( c != 0){
+        do{
+            //Recuperer l'id de la voiture et la mettre dans le contrat
+            printf("\nVeuillez entrer l'id de la voiture que vous souhaitez louer: ");
+            scanf("%d", &id);
+            v = -1;
+            for(i=0; i<c; i++){
+                if(id == T[i])
+                    return id;
+            }
+        }while(v == -1);
+    }
+
     return -1;
 
 }
@@ -260,50 +290,42 @@ int LouerVoiture (char *fcontrat, char *fclient, char * fvoiture){
     //Recuperer le nom et prenom du client
     //Verifier si il existe deja dans le fichier client
     //Sinon lui proposer de creer un compte
-    do{
-        printf("Veuillez saisir vos informations:\n");
+    printf("Veuillez saisir vos informations:\n");
 
-        printf("\tNom: ");
-        fflush(stdin);
-        fgets(C.nom, 20, stdin); //Le nom peut etre compose
-        lg = strlen(C.nom);
-        C.nom[lg-1] = '\0'; //La chaine de caracteres recuperer par fgets() se termine par '\n'
+    printf("\tNom: ");
+    fflush(stdin);
+    fgets(C.nom, 20, stdin); //Le nom peut etre compose
+    lg = strlen(C.nom);
+    C.nom[lg-1] = '\0'; //La chaine de caracteres recuperer par fgets() se termine par '\n'
 
-        printf("\tPr%cnom: ",130);
-        fflush(stdin);
-        fgets(C.prenom, 20, stdin); //Le prenom peut etre compose
-        lg = strlen(C.prenom);
-        C.prenom[lg-1] = '\0'; //La chaine de caracteres recuperer par fgets() se termine par '\n'
+    printf("\tPr%cnom: ",130);
+    fflush(stdin);
+    fgets(C.prenom, 20, stdin); //Le prenom peut etre compose
+    lg = strlen(C.prenom);
+    C.prenom[lg-1] = '\0'; //La chaine de caracteres recuperer par fgets() se termine par '\n'
 
-        vc = VerifyC(C, fclient);
+    vc = VerifyC(C, fclient);
 
-        if (vc == -1){
-            printf("C'est votre premi%cre fois chez nous!\n",138);
-            printf("Voulez-vous cr%cer un compte chez nous?\n",130);
-            printf("\n1: Oui\t\t2: Non\n");
-            printf("\nVotre choix: ");
-            scanf("%d", &x);
-            if(x == 1){
-                printf("\nEntrez vos information:\n");
-                AjouterClient(fclient);
-                TC = C_ExtractData(fclient);
-                N = C_ArraySize(fclient);
-                vc = N-1;
-            }
-            if(x == 2){
-                return 0;
-            }
-        }
-
-        TC = C_ExtractData(fclient);
-        printf("\nVotre Profil:\n");
-        AfficherClient(TC[vc]);
-        printf("\nVoulez vous continuer avec les informations figurez dans ce profil?\n");
-        printf("\n1: Oui, c'est moi\t\t2: Non, Ce n'est pas mon profil\n");
+    if (vc == -1){
+        printf("C'est votre premi%cre fois chez nous!\n",138);
+        printf("Voulez-vous cr%cer un compte chez nous?\n",130);
+        printf("\n1: Oui\t\t2: Non\n");
         printf("\nVotre choix: ");
         scanf("%d", &x);
+        if(x == 1){
+            printf("\nEntrez vos information:\n");
+            AjouterClient(fclient);
+            TC = C_ExtractData(fclient);
+            N = C_ArraySize(fclient);
+            vc = N-1;
+        }
+        if(x == 2){
+            return 0;
+        }
+    }
 
-    }while( x != 1 );
+    TC = C_ExtractData(fclient);
+
     //Recuperer l'id du client et la mettre dans le contrat
     CL.idClient = TC[vc].idClient;
 
@@ -311,51 +333,35 @@ int LouerVoiture (char *fcontrat, char *fclient, char * fvoiture){
     //Verifier si il existe si oui verifier si il est disponible
     //Si oui la louer
     //Sinon Quitter
-    do{
-        printf("\n\nQuelle voiture vous souhaitez louer?\n\n");
+    printf("\n\nQuelle voiture vous souhaitez louer?\n\n");
 
-        printf("\tMarque: ");
-        fflush(stdin);
-        fgets(V.marque, 15, stdin); //La marque peut etre compose
-        lg = strlen(V.marque);
-        V.marque[lg-1] = '\0'; //La chaine de caracteres recuperer par fgets() se termine par '\n'
+    printf("\tMarque: ");
+    fflush(stdin);
+    fgets(V.marque, 15, stdin); //La marque peut etre compose
+    lg = strlen(V.marque);
+    V.marque[lg-1] = '\0'; //La chaine de caracteres recuperer par fgets() se termine par '\n'
 
-        printf("\tNom Voiture: ");
-        fflush(stdin);
-        fgets(V.nomVoiture, 15, stdin); //La marque peut etre compose
-        lg = strlen(V.nomVoiture);
-        V.nomVoiture[lg-1] = '\0'; //La chaine de caracteres recuperer par fgets() se termine par '\n'
+    printf("\tNom Voiture: ");
+    fflush(stdin);
+    fgets(V.nomVoiture, 15, stdin); //La marque peut etre compose
+    lg = strlen(V.nomVoiture);
+    V.nomVoiture[lg-1] = '\0'; //La chaine de caracteres recuperer par fgets() se termine par '\n'
+    //Verifier si la voiture existe
+    vv = VerifyV(V, fvoiture);
+    if (vv == -1){
+        printf("\nAucune voiture avec ce nom et cette marque\n");
+        return 0;
+    }
 
-        vv = VerifyV(V, fvoiture);
-        if (vv == -1){
-            printf("\nAucune voiture avec ce nom et cette marque\n");
-            return 0;
-        }else{
+    TV = V_ExtractData(fvoiture);
 
-            TV = V_ExtractData(fvoiture);
-            vv = VerifyDispV(V,fvoiture);
-
-            if(vv != -1){
-                printf("\nVoulez vous louer cette voiture?\n");
-                AfficherVoiture(TV[vv]);
-                printf("\n1: Oui\t\t2: Non\t\t3: Retour\n");
-                printf("\nVotre choix: ");
-                scanf("%d", &x);
-
-                if( x == 3){return 0;}
-
-            }else{
-                printf("\nLa voiture demand%ce n'est pas disponible!\n",130);
-                return 0;
-            }
-        }
-
-    } while(x != 1);
-
-    //Change L'attribut EnLocation de la voiture de Oui ==> Non
-    CL_ModifierV(fvoiture, vv);
-    //Recuperer l'id de la voiture et la mettre dans le contrat
-    CL.idVoiture = TV[vv].idVoiture;
+    //Verifier si la voiture est disponible
+    CL.idVoiture = VerifyDispV(V, fvoiture);
+    if (CL.idVoiture == -1){
+        printf("\nLa voiture demand%ce n'est pas disponible!\n",130);
+        return 0;
+    }
+    vv = V_FindId(fvoiture, CL.idVoiture);
 
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
@@ -413,6 +419,9 @@ int LouerVoiture (char *fcontrat, char *fclient, char * fvoiture){
 
     }while(NJT == 0);
 
+    //Change L'attribut EnLocation de la voiture de Oui ==> Non
+    CL_ModifierV(fvoiture, vv);
+
     CL.cout = NJT * TV[vv].prixJour;
     printf("\nLe cout total est: %d DHS\n", CL.cout);
 
@@ -453,7 +462,7 @@ int SuppCL(char * fname,int i){
     }
 
     TABCL = CL_ExtractData(fname);
-    N = V_ArraySize(fname);
+    N = CL_ArraySize(fname);
 
     for(j=0; j<N; j++){
         if (j != i)
@@ -500,11 +509,11 @@ int SupprimerContrat (char * fcontrat, char *fvoiture){
             return 0;
 
     }while(x != 1 );
-
+    //Trouver la voiture louee
     j = V_FindId(fvoiture,TABCL[i].idVoiture);
     TABV = V_ExtractData(fvoiture);
-
-    if(strcmp(TABV[j].EnLocation, "Non") == 0){
+    //Tester si le client a retourner la voiture ou pas
+    if(strcmp(TABV[j].EnLocation, "Non") == 0 || j == -2){
         int res = SuppCL(fcontrat, i);
         if ( res == 1)
             printf("Le contrat a %ct%c supprim%c avec succ%cs!\n", 130,130,130,138);
@@ -524,6 +533,7 @@ void RetournerVoiture (char *fcontrat, char *fvoiture){
     int i, j, idV;
     float NC;
     contrat *TABCL;
+    voiture *TV;
 
     do{
         printf("Veuillez entrez votre n%c de contrat: ", 248);
@@ -534,17 +544,20 @@ void RetournerVoiture (char *fcontrat, char *fvoiture){
     }while(i == -2);
 
     TABCL = CL_ExtractData(fcontrat);
+    TV = V_ExtractData(fvoiture);
 
     idV = TABCL[i].idVoiture;
     j = V_FindId(fvoiture,idV);
+    if(strcmp(TV[j].EnLocation, "Oui") == 0){
+        int res = CL_ModifierV(fvoiture, j);
 
-    int res = CL_ModifierV(fvoiture, j);
-
-    if ( res == 1 )
-        printf("La voiture a %ct%c retourn%ce avec succ%cs!\n", 130,130,130,138);
-    else
-        printf("ERREUR: la voiture n'a pas pu %ctre retourn%ce!\n",136,130);
-
+        if ( res == 1 )
+            printf("La voiture a %ct%c retourn%ce avec succ%cs!\n", 130,130,130,138);
+        else
+            printf("ERREUR: la voiture n'a pas pu %ctre retourn%ce!\n",136,130);
+    } else {
+        printf("La voiture a  deja %ct%c retourn%ce!\n",130, 130,130);
+    }
 
 }
 int ModifierContrat(char * fcontrat, char * fvoiture){
@@ -552,7 +565,7 @@ int ModifierContrat(char * fcontrat, char * fvoiture){
     voiture V, *TV;
     contrat *TABCL;
     float NC;
-    int x, i, j, N, c, vv, lg;
+    int x, i, j, k, N, c, vv, lg;
     int TJC,TJD, TJF, NJT, JEq;
     do{
         do{
@@ -630,50 +643,42 @@ int ModifierContrat(char * fcontrat, char * fvoiture){
         printf("Votre choix: ");
         scanf("%d", &c);
         if (c == 1){
-            do{
-                printf("\n\nQuelle voiture vous souhaitez louer?\n\n");
+            //Change L'attribut EnLocation de la voiture louee precedement de Oui ==> Non
+            k = V_FindId(fvoiture, TABCL[i].idVoiture);
+            CL_ModifierV(fvoiture, k);
 
-                printf("\tMarque: ");
-                fflush(stdin);
-                fgets(V.marque, 15, stdin); //La marque peut etre compose
-                lg = strlen(V.marque);
-                V.marque[lg-1] = '\0'; //La chaine de caracteres recuperer par fgets() se termine par '\n'
+            printf("\n\nQuelle voiture vous souhaitez louer?\n\n");
 
-                printf("\tNom Voiture: ");
-                fflush(stdin);
-                fgets(V.nomVoiture, 15, stdin); //La marque peut etre compose
-                lg = strlen(V.nomVoiture);
-                V.nomVoiture[lg-1] = '\0'; //La chaine de caracteres recuperer par fgets() se termine par '\n'
+            printf("\tMarque: ");
+            fflush(stdin);
+            fgets(V.marque, 15, stdin); //La marque peut etre compose
+            lg = strlen(V.marque);
+            V.marque[lg-1] = '\0'; //La chaine de caracteres recuperer par fgets() se termine par '\n'
 
-                vv = VerifyV(V, fvoiture);
-                if (vv == -1){
-                    printf("\nAucune voiture avec ce nom et cette marque\n");
-                    return 0;
-                }else{
+            printf("\tNom Voiture: ");
+            fflush(stdin);
+            fgets(V.nomVoiture, 15, stdin); //La marque peut etre compose
+            lg = strlen(V.nomVoiture);
+            V.nomVoiture[lg-1] = '\0'; //La chaine de caracteres recuperer par fgets() se termine par '\n'
 
-                    vv = VerifyDispV(V,fvoiture);
+            vv = VerifyV(V, fvoiture);
+            if (vv == -1){
+                printf("\nAucune voiture avec ce nom et cette marque\n");
+                return 0;
+            }
 
-                    if(vv != -1){
-                        printf("\nVoulez vous louer cette voiture?\n");
-                        AfficherVoiture(TV[vv]);
-                        printf("\n1: Oui\t\t2: Non\t\t3: Retour\n");
-                        printf("\nVotre choix: ");
-                        scanf("%d", &x);
+            TV = V_ExtractData(fvoiture);
+            vv = VerifyDispV(V,fvoiture);
 
-                        if( x == 3){return 0;}
-
-                    }else{
-                        printf("\nLa voiture demand%ce n'est pas disponible!\n",130);
-                        return 0;
-                    }
-                }
-
-            } while(x != 1);
-
-            //Change L'attribut EnLocation de la voiture de Oui ==> Non
-            CL_ModifierV(fvoiture, vv);
-            //Recuperer l'id de la voiture et la mettre dans le contrat
-            TABCL[i].idVoiture = TV[vv].idVoiture;
+            if(vv != -1){
+                //Recuperer l'id de la voiture et la mettre dans le contrat
+                printf("\nVeuillez entrer l'id de la voiture que vous souhaitez louer: ");
+                scanf("%d", &TABCL[i].idVoiture);
+                vv = V_FindId(fvoiture, TABCL[i].idVoiture);
+            }else{
+                printf("\nLa voiture demand%ce n'est pas disponible!\n",130);
+                return 0;
+            }
         }
         do{
             printf("\n\nDate de debut:\n");
@@ -733,6 +738,8 @@ int ModifierContrat(char * fcontrat, char * fvoiture){
     TABCL[i].cout = NJT * TV[j].prixJour;
     printf("\nVotre nouveau cout total est: %d DHS\n", TABCL[i].cout);
 
+    //Change L'attribut EnLocation de la voiture de Non ==> Oui
+    CL_ModifierV(fvoiture, vv);
 
     ftmp = fopen("tmp.dat", "wb");
     if(ftmp == NULL){
@@ -756,6 +763,32 @@ int ModifierContrat(char * fcontrat, char * fvoiture){
 
 
     return 1;
+
+}
+
+//Debugging
+void ListeContrats (char *fname){
+    FILE *fcontrat;
+    contrat C;
+    int c=0, N;
+
+    N = CL_ArraySize(fname);
+
+    if(N == 0){
+        printf("Aucun contrat n'a %ct%c ajout%c.\n", 130,130, 130);
+    }else{
+        fcontrat = fopen(fname, "rb");
+        if(fcontrat == NULL){
+            printf("ERREUR: Impossible d'ouvrir ce fichier!\n");
+            exit(0);
+        }
+        while(fread(&C, sizeof(contrat), 1, fcontrat)){
+            AfficherContrat(C);
+            c++;
+        }
+
+        fclose(fcontrat);
+    }
 
 }
 #endif // LOCATIONVOITURE_H_INCLUDED
