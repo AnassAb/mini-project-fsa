@@ -61,7 +61,7 @@ int V_FindId (char *fname, int id){
     return -2;
 }
 void AfficherVoiture (voiture V){
-    printf("Voiture ID: %d\n", V.idVoiture);
+    printf("Voiture ID %d:\n", V.idVoiture);
     printf("\tMarque: %s\n",V.marque);
     printf("\tNom: %s\n",V.nomVoiture);
     printf("\tCouleur: %s\n",V.couleur);
@@ -133,16 +133,15 @@ void ListeVoitures (char *fname){
     voiture V;
     int c=0, N;
 
-    fvoiture = fopen(fname, "rb");
-    if(fvoiture == NULL){
-        printf("ERREUR: Impossible d'ouvrir ce fichier!\n");
-        exit(0);
-    }
-
     N = V_ArraySize(fname);
     if(N == 0){
-        printf("Aucune voiture n'a %ct%c ajout%ce.\nVeuillez ajouter des voitures\n", 130,130, 130);
+        printf("Aucune voiture n'a %ct%c ajout%ce.\nVeuillez ajouter des voitures.\n", 130,130, 130);
     }else{
+        fvoiture = fopen(fname, "rb");
+        if(fvoiture == NULL){
+            printf("ERREUR: Impossible d'ouvrir ce fichier!\n");
+            exit(0);
+        }
         while(fread(&V, sizeof(voiture), 1, fvoiture)){
             AfficherVoiture(V);
             c++;
@@ -157,8 +156,6 @@ int ModifierVoiture (char * fname){
     voiture *TABV;
     int x, i, id, lg, N;
 
-    TABV = V_ExtractData(fname);
-
     do{
         do{
             printf("Quelle voiture voulez vous modifier?\n");
@@ -170,6 +167,7 @@ int ModifierVoiture (char * fname){
                 printf("Aucune voiture avec cet id!\n");
         }while(i == -2);
 
+        TABV = V_ExtractData(fname);
         AfficherVoiture(TABV[i]);
 
         printf("Voulez vous modifier cette voiture?\n");
@@ -207,9 +205,7 @@ int ModifierVoiture (char * fname){
     printf("\tPrix par jour: ");
     scanf("%d",&TABV[i].prixJour);
 
-    printf("\tEst ce qu'il est en location? ( Oui || Non )\n");
-    printf("\tVotre choix: ");
-    scanf("%s",TABV[i].EnLocation);
+    //On ne modifier pas l'attribut enLocation sauf que dans le menu location
 
     ftmp = fopen("tmp.dat", "wb");
     if(ftmp == NULL){
@@ -239,7 +235,7 @@ int SupprimerVoiture (char * fname){
     voiture *TABV;
     int x, i, j, id, N;
 
-    TABV = V_ExtractData(fname);
+
 
     do{
         do{
@@ -252,6 +248,7 @@ int SupprimerVoiture (char * fname){
                 printf("Aucune voiture avec cet id!\n");
         }while(i == -2);
 
+        TABV = V_ExtractData(fname);
         AfficherVoiture(TABV[i]);
 
         printf("Voulez vous supprimer cette voiture?\n");
